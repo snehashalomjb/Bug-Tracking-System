@@ -93,7 +93,7 @@ export const Register: React.FC = () => {
             Create Account
           </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Get started with Antigravity Bug Tracker
+            Get started with Bug Tracking System
           </p>
         </div>
 

@@ -3,16 +3,29 @@ from sqlalchemy.orm import sessionmaker
 from typing import Generator
 from app.core.config import settings
 
-# For SQLite compatibility during testing
+db_url = settings.DATABASE_URL
 connect_args = {}
-if settings.DATABASE_URL.startswith("sqlite"):
+
+if db_url.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
 
-engine = create_engine(
-    settings.DATABASE_URL,
-    pool_pre_ping=True,
-    connect_args=connect_args
-)
+# Dynamic fallback to SQLite if MySQL is unreachable (e.g. running locally outside Docker)
+try:
+    if db_url.startswith("mysql"):
+        # Test connection immediately
+        temp_engine = create_engine(db_url, pool_pre_ping=True)
+        with temp_engine.connect() as conn:
+            pass
+        engine = temp_engine
+    else:
+        engine = create_engine(db_url, connect_args=connect_args)
+except Exception:
+    import logging
+    logger = logging.getLogger("bug_tracker")
+    logger.warning("Unreachable MySQL target. Falling back to local SQLite database: sqlite:///./sql_app.db")
+    db_url = "sqlite:///./sql_app.db"
+    connect_args = {"check_same_thread": False}
+    engine = create_engine(db_url, connect_args=connect_args)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

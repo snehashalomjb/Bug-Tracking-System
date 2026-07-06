@@ -55,7 +55,7 @@ export const Login: React.FC = () => {
             Sign In
           </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Access the Antigravity Bug Tracking System
+            Access the Bug Tracking System
           </p>
         </div>
 

@@ -73,7 +73,7 @@ export const DashboardLayout: React.FC = () => {
               <Bug className="w-5 h-5 animate-pulse" />
             </div>
             <span className="text-lg font-bold bg-gradient-to-r from-brand-600 to-indigo-600 bg-clip-text text-transparent dark:from-brand-400 dark:to-indigo-400">
-              Antigravity Bug
+              Bug Tracker
             </span>
           </Link>
           <button 
@@ -141,7 +141,7 @@ export const DashboardLayout: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"
+              className="rounded-lg p-2 text-slate-550 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -155,7 +155,7 @@ export const DashboardLayout: React.FC = () => {
             {/* Theme Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="rounded-lg p-2 text-slate-505 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title="Toggle Theme"
             >
               {isDarkMode ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5" />}
@@ -182,7 +182,7 @@ export const DashboardLayout: React.FC = () => {
                     <div className="space-y-3 max-h-60 overflow-y-auto">
                       <div className="border-b border-slate-100 dark:border-slate-800 pb-2">
                         <p className="text-xs text-slate-600 dark:text-slate-300">
-                          Welcome to the Antigravity Bug Tracking System!
+                          Welcome to the Bug Tracking System!
                         </p>
                         <span className="text-[10px] text-slate-400">Just now</span>
                       </div>

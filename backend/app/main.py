@@ -56,6 +56,10 @@ app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 # Seeding logic on startup
 @app.on_event("startup")
 def on_startup():
+    from app.database.session import engine
+    from app.models.base import Base
+    Base.metadata.create_all(bind=engine)
+    
     db = SessionLocal()
     try:
         logger.info("Seeding roles...")
