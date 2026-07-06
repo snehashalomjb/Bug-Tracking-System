@@ -7,7 +7,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.core.config import settings
 from app.database.session import engine, SessionLocal
 from app.models.base import Base
-from app.routers import auth, users, projects
+from app.routers import auth, users, projects, bugs, comments
 from app.services.auth_service import AuthService
 from app.middleware.error_handler import (
     global_exception_handler,
@@ -66,6 +66,8 @@ def on_startup():
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(users.router, prefix=settings.API_V1_STR)
 app.include_router(projects.router, prefix=settings.API_V1_STR)
+app.include_router(bugs.router, prefix=settings.API_V1_STR)
+app.include_router(comments.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def read_root():
