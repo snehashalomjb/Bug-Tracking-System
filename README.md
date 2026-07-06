@@ -137,12 +137,34 @@ The system seeds four primary roles:
 
 ---
 
+## Frontend Architecture
+
+The frontend client codebase is structured as a Single Page Application (SPA) utilizing Vite, React, TypeScript, and Tailwind CSS v4:
+
+```
+frontend/
+├── src/
+│   ├── assets/         # Static visual assets
+│   ├── components/     # Protected route guards and shared widgets
+│   ├── context/        # AuthSession, DarkMode theme, and Toast alert providers
+│   ├── layouts/        # Collapsible sidebars and header navigation frames
+│   ├── pages/          # Dashboard, Projects log, Users grids, Reports, and Bug detail screens
+│   ├── services/       # Axios API client setup (with 401 token refresh queue interceptors)
+│   ├── types/          # Global TypeScript data schemas
+│   ├── App.tsx         # Route router mappings
+│   ├── main.tsx        # React client entrypoint
+│   └── index.css       # Tailwind CSS v4 directive settings & theme configurations
+├── postcss.config.js   # PostCSS compiler options
+├── tailwind.config.js  # Content scanner options
+├── tsconfig.json       # TypeScript compiler settings
+└── Dockerfile          # Multi-stage static compilation with Nginx serving
+```
+
+---
+
 ## Local Setup & Execution
 
-### 1. Requirements
-Ensure Python 3.12+ is installed on your local machine.
-
-### 2. Local Installation
+### 1. Backend Server Setup
 Navigate to the `backend/` directory:
 ```bash
 # Create virtual environment
@@ -155,19 +177,51 @@ source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
-```
 
-### 3. Run Development Server
-Run `uvicorn` local server. Database defaults to SQLite for simple local evaluation:
-```bash
-# Set PYTHONPATH and start uvicorn
+# Start local server
 uvicorn app.main:app --reload
 ```
-API Documentation will be available locally at `http://127.0.0.1:8000/docs`.
+- API will run locally at: `http://127.0.0.1:8000`
+- Swagger/OpenAPI docs: `http://127.0.0.1:8000/docs`
 
-### 4. Running Test Suite
-Execute tests with `pytest` using the active virtual environment:
+### 2. Frontend Client Setup
+Navigate to the `frontend/` directory:
+```bash
+# Install package dependencies
+npm install
+
+# Start local dev server
+npm run dev
+```
+- Frontend client will run locally at: `http://localhost:5173`
+
+### 3. Running Backend Test Suite
+Inside the `backend/` directory with active virtual environment:
 ```bash
 python -m pytest
 ```
-All test configurations are located in `tests/conftest.py` using SQLite in-memory databases for isolated execution.
+
+---
+
+## Production Deployment using Docker Compose
+
+To spin up the entire multi-container stack (MySQL, FastAPI, and Nginx-served React SPA) in production mode:
+
+```bash
+# Start all containers in the background and build images
+docker-compose up --build -d
+```
+
+### Services Access Specifications:
+- **Frontend SPA**: Serves statically at `http://localhost` (Nginx port 80).
+- **Backend API**: Accessible at `http://localhost:8000` (FastAPI Uvicorn port 8000).
+- **MySQL Database**: Exposed at `localhost:3306` (Root user credentials managed in `docker-compose.yml`).
+
+---
+
+## CI/CD Pipeline
+
+A GitHub Actions pipeline is configured in `.github/workflows/ci.yml` that triggers on every push or pull request targeting the `main` branch. The runner executes the following workflows:
+1. **Backend Tests**: Sets up Python 3.12, installs pip requirements, and runs `pytest` verifying all auth, project logic, bug status flows, comments, and attachment uploads.
+2. **Frontend Compilation**: Sets up Node.js 20, installs dependencies, and runs `npm run build` to guarantee compilation error-free bundles.
+
