@@ -13,6 +13,8 @@ import Unauthorized from './pages/Unauthorized';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import BugsList from './pages/BugsList';
+import BugForm from './pages/BugForm';
+import BugDetails from './pages/BugDetails';
 import Users from './pages/Users';
 import Reports from './pages/Reports';
 import Profile from './pages/Profile';
@@ -38,6 +40,9 @@ const App: React.FC = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/bugs" element={<BugsList />} />
+                  <Route path="/bugs/new" element={<BugForm />} />
+                  <Route path="/bugs/:id" element={<BugDetails />} />
+                  <Route path="/bugs/:id/edit" element={<BugForm />} />
                   <Route path="/reports" element={<Reports />} />
                   <Route path="/profile" element={<Profile />} />
                   
